@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<Mascot xmlns="http://www.group-finity.com/Mascot" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.group-finity.com/Mascot Mascot.xsd">
+
+	<ActionList>
+		<Action Name="Look" Type="Embedded" Class="com.group_finity.mascot.action.Look" />
+		<Action Name="Offset" Type="Embedded" Class="com.group_finity.mascot.action.Offset" />
+
+		<!-- Standing -->
+
+		<Action Name="Move" Type="Move" Draggable="false">
+			<Animation>
+				<Pose Image="/BounceBullet1.png" ImageAnchor="0,0" Velocity="-15,15" Duration="2" Sound="/BulletBounce1.wav" Volume="0" />
+				<Pose Image="/BounceBullet2.png" ImageAnchor="0,0" Velocity="-15,-22" Duration="2" />
+				<Pose Image="/BounceBullet3.png" ImageAnchor="0,0" Velocity="-15,-22" Duration="2" />
+				<Pose Image="/BounceBullet4.png" ImageAnchor="0,0" Velocity="-15,22" Duration="2" />
+				<Pose Image="/BounceBullet5.png" ImageAnchor="0,0" Velocity="-15,22" Duration="2" Sound="/BulletBounce2.wav" Volume="0" />
+				<Pose Image="/BounceBullet6.png" ImageAnchor="0,0" Velocity="-15,-22" Duration="2" />
+				<Pose Image="/BounceBullet7.png" ImageAnchor="0,0" Velocity="-15,-22" Duration="2" />
+				<Pose Image="/BounceBullet8.png" ImageAnchor="0,0" Velocity="-15,22" Duration="2" />
+				<Pose Image="/BounceBullet9.png" ImageAnchor="0,0" Velocity="-15,22" Duration="2"  Sound="/BulletBounce1.wav" Volume="0"/>
+				<Pose Image="/BounceBullet10.png" ImageAnchor="0,0" Velocity="-15,-15" Duration="2" />
+			</Animation>
+		</Action>
+		
+		<Action Name="SelfDestruct" Type="Embedded" Class="com.group_finity.mascot.action.SelfDestruct" Draggable="false">
+			<Animation>
+				<Pose Image="/Impact1.png" ImageAnchor="12,15" Velocity="0,0" Duration="2" Sound="/impact.wav" />
+				<Pose Image="/Impact2.png" ImageAnchor="12,15" Velocity="0,0" Duration="2" />
+				<Pose Image="/Impact3.png" ImageAnchor="12,15" Velocity="0,0" Duration="2" />
+				<Pose Image="/Impact4.png" ImageAnchor="12,15" Velocity="0,0" Duration="2" />
+				<Pose Image="/Impact5.png" ImageAnchor="12,15" Velocity="0,0" Duration="2" />
+				<Pose Image="/Impact6.png" ImageAnchor="12,15" Velocity="0,0" Duration="2" />
+				<Pose Image="/Impact7.png" ImageAnchor="12,15" Velocity="0,0" Duration="2" />
+				<Pose Image="/Impact8.png" ImageAnchor="12,15" Velocity="0,0" Duration="2" />
+			</Animation>
+		</Action>
+
+		<!-- Wall -->
+
+		<Action Name="GrabWall" Type="Stay" BorderType="Wall" Draggable="false">
+			<Animation>
+				<Pose Image="/BounceBullet1.png" ImageAnchor="32,64" Velocity="0,0" Duration="1" />
+			</Animation>
+		</Action>
+
+		<!-- Falling -->
+
+		<Action Name="Falling" Type="Embedded" Class="com.group_finity.mascot.action.Fall"
+			RegistanceX="0.05" RegistanceY="0.1" Gravity="2" Draggable="false">
+			<Animation>
+				<Pose Image="/BounceBullet1.png" ImageAnchor="32,64" Velocity="0,0" Duration="250" />
+			</Animation>
+		</Action>
+		
+		<!-- Dragging -->
+
+		<Action Name="Pinched" Type="Embedded" Class="com.group_finity.mascot.action.Dragged">
+			<Animation>
+				<Pose Image="/BounceBullet1.png" ImageAnchor="32,64" Velocity="0,0" Duration="1" />
+			</Animation>
+		</Action>
+		
+		<Action Name="Resisting" Type="Embedded" Class="com.group_finity.mascot.action.Regist">
+			<Animation>
+				<Pose Image="/BounceBullet1.png" ImageAnchor="32,64" Velocity="0,0" Duration="1" />
+			</Animation>
+		</Action>
+	</ActionList>
+
+	<!-- Actual Behavior -->
+	<ActionList>
+
+		<!-- ALWAYS REQUIRED -->
+		<Action Name="Fall" Type="Sequence" Loop="false">
+			<ActionReference Name="Falling" />
+			<ActionReference Name="SelfDestruct" />
+		</Action>
+
+		<!-- ALWAYS REQUIRED -->
+		<Action Name="Dragged" Type="Sequence" Loop="true">
+			<ActionReference Name="Pinched"/>
+			<ActionReference Name="Resisting" />
+		</Action>
+
+		<!-- ALWAYS REQUIRED -->
+		<Action Name="Thrown" Type="Sequence" Loop="false">
+			<ActionReference Name="Falling" InitialVX="${mascot.environment.cursor.dx}" InitialVY="${mascot.environment.cursor.dy}"/>
+			<ActionReference Name="SelfDestruct" />
+		</Action>
+
+		<Action Name="HitWall" Type="Sequence" Loop="false">
+			<ActionReference Name="GrabWall" />
+			<ActionReference Name="SelfDestruct" />
+		</Action>
+
+		<Action Name="TravelLeft" Type="Sequence" Loop="false">
+			<ActionReference Name="Move" TargetX="#{mascot.environment.workArea.left}" />
+			<ActionReference Name="SelfDestruct" />
+		</Action>
+
+		<Action Name="TravelRight" Type="Sequence" Loop="false">
+			<ActionReference Name="Move" TargetX="#{mascot.environment.workArea.left+mascot.environment.workArea.width}" />
+			<ActionReference Name="SelfDestruct" />
+		</Action>
+
+		<Action Name="ChaseMouse" Type="Sequence" Loop="false">
+			<ActionReference Name="Falling" />
+			<ActionReference Name="SelfDestruct" />
+		</Action>
+	</ActionList>
+
+</Mascot>
