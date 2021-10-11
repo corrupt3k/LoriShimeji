@@ -17,4 +17,4 @@ Download Zip from GitHub Repository.
 <br>
 Unzip into a folder.
 <br>
-Run shimeji.exe
+Run shimeji-ee.jar
